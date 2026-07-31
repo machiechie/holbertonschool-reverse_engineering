@@ -14,7 +14,7 @@ if [ ! -f "$file_name" ]; then
     exit 1
 fi
 
-# Check if file is a valid ELF file using readelf or file command
+# Check if file is a valid ELF file using readelf
 if ! readelf -h "$file_name" >/dev/null 2>&1; then
     echo "Error: File '$file_name' is not a valid ELF file."
     exit 1
@@ -37,7 +37,7 @@ fi
 # Extract ELF header information using readelf
 magic_number=$(readelf -h "$file_name" | grep "Magic:" | sed 's/.*Magic:[ \t]*//')
 class=$(readelf -h "$file_name" | grep "Class:" | awk '{print $2}')
-byte_order=$(readelf -h "$file_name" | grep "Data:" | awk '{print $2, $3}')
+byte_order=$(readelf -h "$file_name" | grep "Data:" | sed 's/.*Data:[ \t]*//')
 entry_point_address=$(readelf -h "$file_name" | grep "Entry point address:" | awk '{print $4}')
 
 display_elf_header_info
